@@ -1,0 +1,30 @@
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Python
+*.py[cod]
+__pycache__/
+*.so
+
+# Django
+*.log
+local_settings.py
+media/
+static/
+.env
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
