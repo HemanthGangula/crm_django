@@ -1,7 +1,5 @@
-from django.urls import path, include
-from . import views
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
+from django.urls import path
+from . import views  # gets all views from views/__init__.py
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -13,4 +11,4 @@ urlpatterns = [
     path('delete/<int:pk>/', views.delete_customer, name='delete_customer'),
     path('add_record/', views.add_record, name='add_record'),
     path('update_record/<int:pk>/', views.update_record, name='update_record'),
-] 
+]
