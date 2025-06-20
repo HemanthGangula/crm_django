@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm
 from django.views.decorators.csrf import csrf_protect
+from .models import Record
 
 def home(request):
+    records = Record.objects.all()
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -17,7 +20,7 @@ def home(request):
             messages.error(request, 'Invalid username or password.')
             return redirect('home')
 
-    return render(request, 'home.html', {})
+    return render(request, 'home.html', {'records': records})
 
 
 def logout_user(request):
@@ -49,3 +52,30 @@ def register(request):
         return render(request, 'register.html', {'form': form})
     
     return redirect('home')
+
+
+def customer_records(request, pk):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Login required to view this page.')
+        return redirect('home')
+
+    try:
+        record = Record.objects.get(pk=pk)
+    except Record.DoesNotExist:
+        messages.error(request, 'Record not found.')
+        return redirect('home')
+
+    if request.method == 'POST':
+        record.first_name = request.POST.get('first_name')
+        record.last_name = request.POST.get('last_name')
+        record.email = request.POST.get('email')
+        record.phone = request.POST.get('phone')
+        record.address = request.POST.get('address')
+        record.city = request.POST.get('city')
+        record.state = request.POST.get('state')
+        record.zipcode = request.POST.get('zipcode')
+        record.save()
+        messages.success(request, 'Record updated successfully!')
+        return redirect('home')
+
+    return render(request, 'customer_records.html', {'record': record}) 
