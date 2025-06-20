@@ -6,8 +6,9 @@ from django.views.decorators.csrf import csrf_protect
 from .models import Record
 
 def home(request):
-    records = Record.objects.all()
+    return render(request, 'home.html', {})
 
+def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -20,8 +21,15 @@ def home(request):
             messages.error(request, 'Invalid username or password.')
             return redirect('home')
 
-    return render(request, 'home.html', {'records': records})
+    return render(request, 'login.html')
 
+def customer_list(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Login required to view customer records.')
+        return redirect('login')
+    else:
+        records = Record.objects.all()
+        return render(request, 'customer_list.html', {'records': records})
 
 def logout_user(request):
     logout(request)
@@ -150,4 +158,3 @@ def update_record(request, pk):
 
     return render(request, 'update_record.html', {'record': record})
 
-    
